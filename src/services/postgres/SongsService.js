@@ -4,18 +4,18 @@ const InvariantError = require('../../exceptions/InvariantError');
 const { mapDBToModel } = require('../../utils');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
-class MusicsService {
+class SongsService {
   constructor() {
     this._pool = new Pool();
   }
 
-  async addMusic({ title, body, tags }) {
+  async addSong({ title, body, tags }) {
     const id = nanoid(16);
     const createdAt = new Date().toISOString();
     const updatedAt = createdAt;
 
     const query = {
-      text: 'INSERT INTO musics VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
       values: [id, title, body, tags, createdAt, updatedAt],
     };
 
@@ -28,14 +28,14 @@ class MusicsService {
     return result.rows[0].id;
   }
 
-  async getMusics() {
-    const result = await this._pool.query('SELECT * FROM musics');
+  async getSongs() {
+    const result = await this._pool.query('SELECT * FROM songs');
     return result.rows.map(mapDBToModel);
   }
 
-  async getMusicById(id) {
+  async getSongById(id) {
     const query = {
-      text: 'SELECT * FROM musics WHERE id = $1',
+      text: 'SELECT * FROM songs WHERE id = $1',
       values: [id],
     };
     const result = await this._pool.query(query);
@@ -47,10 +47,10 @@ class MusicsService {
     return result.rows.map(mapDBToModel)[0];
   }
 
-  async editMusicById(id, { title, body, tags }) {
+  async editSongById(id, { title, body, tags }) {
     const updatedAt = new Date().toISOString();
     const query = {
-      text: 'UPDATE musics SET title = $1, body = $2, tags = $3, updated_at = $4 WHERE id = $5 RETURNING id',
+      text: 'UPDATE songs SET title = $1, body = $2, tags = $3, updated_at = $4 WHERE id = $5 RETURNING id',
       values: [title, body, tags, updatedAt, id],
     };
 
@@ -61,9 +61,9 @@ class MusicsService {
     }
   }
 
-  async deleteMusicById(id) {
+  async deleteSongById(id) {
     const query = {
-      text: 'DELETE FROM musics WHERE id = $1 RETURNING id',
+      text: 'DELETE FROM songs WHERE id = $1 RETURNING id',
       values: [id],
     };
 
@@ -75,4 +75,4 @@ class MusicsService {
   }
 }
 
-module.exports = MusicsService;
+module.exports = SongsService;
