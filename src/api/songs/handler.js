@@ -159,6 +159,27 @@ class SongsHandler {
       return response;
     }
   }
+
+  async getSongsByAlbumIdHandler(request, h) {
+    try {
+      const { query } = request;
+      const songs = await this._service.getSongsByAlbumId(query);
+      return {
+        status: 'success',
+        data: {
+          songs,
+        },
+      };
+    } catch (error) {
+      const response = h.response({
+        status: 'error',
+        message: 'Maaf, terjadi kegagalan pada server kami.',
+      });
+      response.code(500);
+      console.log(error);
+      return response;
+    }
+  }
 }
 
 module.exports = SongsHandler;

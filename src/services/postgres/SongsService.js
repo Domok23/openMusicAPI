@@ -40,14 +40,6 @@ class SongsService {
     return result.rows.map(modelGetSongById)[0];
   }
 
-  async getSongsByAlbumId(albumId) {
-    const result = await this._pool.query({
-      text: 'SELECT * FROM songs WHERE album_id = $1',
-      values: [albumId],
-    });
-    return result.rows.map(modelGetSongById);
-  }
-
   async editSongById(id, { title, year, genre, performer, duration, albumId }) {
     const result = await this._pool.query({
       text: 'UPDATE songs SET title = $1, year = $2, genre = $3, performer = $4, duration = $5, album_id = $6 WHERE id = $7 RETURNING id',
@@ -66,6 +58,14 @@ class SongsService {
     if (!result.rows.length) {
       throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan');
     }
+  }
+
+  async getSongsByAlbumId(albumId) {
+    const result = await this._pool.query({
+      text: 'SELECT * FROM songs WHERE album_id = $1',
+      values: [albumId],
+    });
+    return result.rows.map(modelGetSongById);
   }
 }
 
