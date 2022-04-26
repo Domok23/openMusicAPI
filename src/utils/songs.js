@@ -1,5 +1,5 @@
 // mapDBToModel
-const shortSongs = ({
+const getSongs = ({
   id,
   title,
   performer,
@@ -9,7 +9,7 @@ const shortSongs = ({
   performer,
 });
 
-const longSongs = ({
+const getSongById = ({
   id,
   title,
   year,
@@ -27,4 +27,4 @@ const longSongs = ({
   albumId: album_id,
 });
 
-module.exports = { shortSongs, longSongs };
+module.exports = { getSongs, getSongById };
