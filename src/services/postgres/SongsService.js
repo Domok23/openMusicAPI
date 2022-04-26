@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
-const { getSongs, getSongById } = require('../../utils/songs');
+const { modelGetSongs, modelGetSongById } = require('../../utils/songs');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
 class SongsService {
@@ -26,7 +26,7 @@ class SongsService {
       text: 'SELECT id, title, performer FROM songs WHERE LOWER(title) LIKE LOWER($1) AND LOWER(performer) LIKE LOWER($2)',
       values: [`%${title}%`, `%${performer}%`],
     });
-    return result.rows.map(getSongs);
+    return result.rows.map(modelGetSongs);
   }
 
   async getSongById(id) {
@@ -37,7 +37,7 @@ class SongsService {
     if (!result.rows.length) {
       throw new NotFoundError('Lagu tidak ditemukan');
     }
-    return result.rows.map(getSongById)[0];
+    return result.rows.map(modelGetSongById)[0];
   }
 
   async getSongsByAlbumId(albumId) {
@@ -45,7 +45,7 @@ class SongsService {
       text: 'SELECT * FROM songs WHERE album_id = $1',
       values: [albumId],
     });
-    return result.rows.map(getSongById);
+    return result.rows.map(modelGetSongById);
   }
 
   async editSongById(id, { title, year, genre, performer, duration, albumId }) {

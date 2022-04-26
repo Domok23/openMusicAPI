@@ -1,8 +1,8 @@
 // mapDBToModel
-const albums = ({ id, name, year }) => ({
+const getAlbumById = ({ id, name, year }) => ({
   id,
   name,
   year,
 });
 
-module.exports = { albums };
+module.exports = { getAlbumById };
